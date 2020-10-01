@@ -49,7 +49,7 @@
         </div>
       </transition>
       <div class='nav-item nav-right'>
-        <div>
+        <div @click="spanlist = !spanlist">
           <svg
             height='1.5em'
             viewBox='0 0 16 16'
@@ -63,6 +63,18 @@
             />
           </svg>
         </div>
+        <transition name="dropdown">
+        <div class="dropdown-list" v-show="spanlist">
+          <ul class="list-group">
+            <li v-for="(item, i) in countryList" :key="i" class="list-group-item">
+              {{ item }}
+            </li>
+            <!-- <li class="list-group-item">
+              h
+            </li> -->
+          </ul>
+        </div>
+        </transition>
       </div>
     </nav>
     <div class='container'>
@@ -79,21 +91,26 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data: function () {
     return {
       filename: [],
       tmp: [],
-      country: 'chinese',
-      hidden: true
+      country: '',
+      hidden: true,
+      spanlist: false,
+      countryList: []
     }
   },
   methods: {
     handleClick: function () {
+      this.getReq()
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 6; j++) {
           var ele = document.getElementById(this.filename[i][j])
-          if (this.tmp[i][j] === this.country + '.png') {
+          if (this.tmp[i][j] === this.countryList[0] + '.png') {
             console.log(i, j)
             ele.classList.add('flag-active')
           } else {
@@ -101,6 +118,14 @@ export default {
           }
         }
       }
+    },
+    getReq: function () {
+      console.log('axios here')
+      axios.get('/api/data').then((res) => {
+        this.countryList = res.data.list
+        console.log(this.countryList)
+      })
+      // console.log(res)
     }
   },
   mounted: function () {
@@ -145,8 +170,25 @@ export default {
 </script>
 
 <style scoped>
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all .3s ease;
+}
+.dropdown-enter,
+.dropdown-leave-to {
+  transform: translateY(-300px);
+  overflow: hidden;
+  /* height: 0; */
+}
+.dropdown-list {
+  max-height: 300px;
+  width: 200px;
+  color: black;
+  overflow-y: scroll;
+  /* top: 100px; */
+}
 .slide-fade-enter-active {
-  transition: all 0.3s ease;
+  transition: all 0.3s;
 }
 .slide-fade-enter,
 slide-fade-leave-to {
@@ -157,6 +199,7 @@ nav {
   margin-bottom: 20px;
   height: 50px;
   color: white;
+  z-index: 10;
 }
 .nav-item {
   margin: 0, 5px;
@@ -165,12 +208,15 @@ nav {
 .nav-right {
   position: absolute;
   right: 10px;
+  top: 10px;
+  width: 200px;
 }
 .flag {
   max-width: 80%;
   height: auto;
   margin: 5px 0;
   opacity: 0.1;
+  z-index: -1;
 }
 .flag-active {
   /* transform: scale(1.2); */
