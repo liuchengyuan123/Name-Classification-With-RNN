@@ -105,8 +105,7 @@ export default {
     }
   },
   methods: {
-    handleClick: function () {
-      this.getReq()
+    getReq: function () {
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 6; j++) {
           var ele = document.getElementById(this.filename[i][j])
@@ -119,11 +118,12 @@ export default {
         }
       }
     },
-    getReq: function () {
+    handleClick: function () {
       console.log('axios here')
       axios.get('/api/data').then((res) => {
         this.countryList = res.data.list
         console.log(this.countryList)
+        this.getReq()
       })
       // console.log(res)
     }
