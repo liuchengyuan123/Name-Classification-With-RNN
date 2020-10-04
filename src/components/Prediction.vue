@@ -1,55 +1,12 @@
 <template>
   <div>
     <nav class='navbar navbar-expand-lg navbar-light bg-dark'>
-      <transition name='slide-fade'>
-        <div @click='hidden = !hidden' v-show='hidden'>
-          <svg
-            height='1.5em'
-            viewBox='0 0 16 16'
-            class='bi bi-person-square nav-item'
-            fill='currentColor'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              fill-rule='evenodd'
-              d='M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z'
-            />
-            <path
-              fill-rule='evenodd'
-              d='M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z'
-            />
-          </svg>
-        </div>
-      </transition>
-      <transition name='slide-fade'>
-        <div v-show='!hidden'>
-          <div class='nav-item'>
-            <input
-              v-model='country'
-              type='input'
-              class='nav-item'
-              id='input-space'
-              placeholder='input a name'
-            />
-            <button
-              class='btn btn-light'
-              style='margin-left: 5px'
-              @click='handleClick'
-            >
-              go
-            </button>
-            <button
-              class='btn btn-light'
-              style='margin-left: 5px'
-              @click='hidden = !hidden'
-            >
-              hide
-            </button>
-          </div>
-        </div>
-      </transition>
+      <div class='title'>
+        <h3>Name Classification With RNN
+        </h3>
+      </div>
       <div class='nav-item nav-right'>
-        <div @click="spanlist = !spanlist">
+        <div @mouseenter="spanlist = !spanlist" @mouseleave="spanlist=!spanlist">
           <svg
             height='1.5em'
             viewBox='0 0 16 16'
@@ -87,6 +44,18 @@
         </div>
       </div>
     </div>
+    <hr>
+    <div class='container'>
+    <div class='row justify-content-md-center'>
+      <div class='col-md-3'>
+        <div class="form-group">
+          <input type="input" v-model='country' placeholder="name" class="form-control">
+          <small class="form-text text-muted">the name you want to know</small>
+        </div>
+        <button class='btn btn-light' @click="handleClick">GO</button>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -121,7 +90,7 @@ export default {
     handleClick: function () {
       console.log('axios here')
       axios.get('/api/data').then((res) => {
-        this.countryList = res.data.list
+        this.countryList = res.data.list.slice(0, 3)
         console.log(this.countryList)
         this.getReq()
       })
@@ -172,19 +141,20 @@ export default {
 <style scoped>
 .dropdown-enter-active,
 .dropdown-leave-active {
-  transition: all .3s ease;
+  transition: all .2s ease;
 }
 .dropdown-enter,
 .dropdown-leave-to {
-  transform: translateY(-300px);
+  transform: scaleY(0);
   overflow: hidden;
   /* height: 0; */
 }
 .dropdown-list {
-  max-height: 300px;
+  max-height: 200px;
   width: 200px;
   color: black;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
+  /* overflow-y: hidden; */
   /* top: 100px; */
 }
 .slide-fade-enter-active {
@@ -197,18 +167,15 @@ slide-fade-leave-to {
 nav {
   margin-top: 0;
   margin-bottom: 20px;
-  height: 50px;
+  height: 80px;
   color: white;
   z-index: 10;
-}
-.nav-item {
-  margin: 0, 5px;
-  /* float: left; */
+  text-align: center;
 }
 .nav-right {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 20px;
   width: 200px;
 }
 .flag {
