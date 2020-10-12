@@ -1,4 +1,4 @@
-# app
+# Name Classification With RNN
 
 > A Vue.js project
 
