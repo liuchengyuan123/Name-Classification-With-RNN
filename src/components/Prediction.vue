@@ -47,10 +47,10 @@
     <hr>
     <div class='container'>
     <div class='row justify-content-md-center'>
-      <div class='col-md-3'>
+      <div class='col-md-4'>
         <div class="form-group">
-          <input type="input" v-model='country' placeholder="name" class="form-control">
-          <small class="form-text text-muted">the name you want to know</small>
+          <input type="input" v-model='country' v-on:keyup.13='handleClick' placeholder="name" class="form-control">
+          <small class="form-text text-muted">Please enter the name you want to know ↑</small>
         </div>
         <button class='btn btn-light' @click="handleClick">GO</button>
       </div>
@@ -216,8 +216,7 @@ nav {
   border: 0px;
   border-bottom: 1px solid whitesmoke;
 }
-#input-space:focus {
-  border: 0px;
-  border-bottom: 1px solid whitesmoke;
+.form-control {
+  text-align: center;
 }
 </style>
